@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.mapper.UserMapper1">
+
+
+
+    <!--查询总记录数-->
+    <select id="findTotal" resultType="long">
+        SELECT COUNT(*) FROM tb_user;
+
+    </select>
+
+    <!--
+        查询一页数据
+    -->
+    <select id="findList" resultType="user1">
+        select * from tb_user order by id ASC limit #{index},#{rowsNum}
+    </select>
+
+    <!--添加用户-->
+    <insert id="addUser1" >
+        insert into tb_user values(null,#{userName},#{password},
+        #{name},#{age},#{sex},#{birthday},now(),now())
+    </insert>
+</mapper>

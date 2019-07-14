@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.mapper.UserMapper">
+    <!--转入-->
+    <update id="transferIn" parameterType="user" >
+       UPDATE user SET money= money + #{money} WHERE name = #{inName};
+    </update>
+
+    <!--转出-->
+    <update id="transferOut" parameterType="user">
+        update user set money = money - #{money} where name = #{outName}
+    </update>
+
+
+</mapper>
