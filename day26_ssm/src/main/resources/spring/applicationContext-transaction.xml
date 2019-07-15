@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+ <!--   1)平台事务管理器 DataSourceTransactionManager 注入连接池对象
+        2)通知 &#45;&#45; 属性和方法&#45;&#45;设置隔离级别  传播行为..
+        3)aop
+        切点
+        通知增强切点-->
+
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <tx:advice id="adviceTx" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="add*" isolation="REPEATABLE_READ" propagation="REQUIRED" timeout="-1"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <!--配置切点-->
+        <aop:pointcut id="pointcut01" expression="execution(* *..add*(..))"/>
+        <!--用通知增强切点-->
+        <aop:advisor advice-ref="adviceTx" pointcut-ref="pointcut01"/>
+    </aop:config>
+
+</beans>
