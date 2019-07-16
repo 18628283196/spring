@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!--
+                1)包扫描  com.itheima.controller
+                2)三大组件
+    -->
+    <context:component-scan base-package="com.itheima.controller"/>
+
+    <!--
+        处理器映射器和处理器适配器
+    -->
+    <mvc:annotation-driven conversion-service="formattingConversionService"/>
+    <!--<mvc:annotation-driven conversion-service="formattingConversionService"/>-->
+
+    <!--视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!--前缀-->
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <!--后缀-->
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!--自定义转换器的配置-->
+    <bean id="formattingConversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <!--
+        把我们的转换器注入到它的属性中
+                private Set<?> converters;
+        -->
+        <property name="converters">
+            <set>
+                <bean id="dateFormartConverter" class="com.itheima.controller.DateFormartConverter"/>
+            </set>
+        </property>
+    </bean>
+    <!--上传解析器
+        id为固定值：multipartResolver
+    -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+       <!-- 上传文件最大的大小-->
+        <property name="maxUploadSize" value="5242880"/>
+    </bean>
+
+    <!--配置自定义异常解析器-->
+    <bean id="exceptionResolver" class="com.itheima.controller.MyHandlerExceptionResolver"></bean>
+
+    <!--
+           拦截器的配置
+                path拦截路径：
+                /*  拦截所有资源  拦截一级目录
+                /**  拦截所有资源  拦截多级目录
+          还可以配置多个拦截器
+
+          执行顺序：前面正常顺序  后面反着执行
+            11拦截器的。。。。preHandle
+            11拦截器的。。。。preHandle
+            22拦截器的。。。。postHandle
+            22拦截器的。。。。postHandle
+            33拦截器的。。。。afterCompletion
+            33拦截器的。。。。afterCompletion
+    -->
+    <!--第一个拦截器-->
+ <!--   <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean id="interceptor" class="com.itheima.controller.MyHandlerInterceptor"/>
+        </mvc:interceptor>
+        &lt;!&ndash;第二个拦截器&ndash;&gt;
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean id="interceptor1" class="com.itheima.controller.MyHandlerInterceptor1"/>
+        </mvc:interceptor>
+    </mvc:interceptors>-->
+
+    <!--配置登录权限拦截器-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean id="interceptor" class="com.itheima.controller.CustomerIterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+
+  <!--  <mvc:interceptors>
+       <mvc:interceptor>
+           <mvc:mapping path="/**"/>
+           <bean id="iterceptor" class="com.itheima.controller.CustomerIterceptor"/>
+       </mvc:interceptor>
+    </mvc:interceptors>-->
+</beans>
