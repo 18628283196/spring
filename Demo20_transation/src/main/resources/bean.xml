@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:Context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--引入外部数据库文件-->
+    <Context:property-placeholder location="db.properties"></Context:property-placeholder>
+    <!--创建连接池-->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+    <!--创建jdbcTemplate对象-->
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <constructor-arg name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="accountDao" class="com.itheima.dao.AccountDaoImpl"></bean>
+    <bean id="accountService" class="com.itheima.service.AccountServiceImpl"></bean>
+
+    <!--
+           一. spring事务的管理
+            1.平台事务管理器：PlatformTransactionManager
+                                DataSourceTransactionManager
+
+                                Connection  commit（）...
+                                设置连接池
+    -->
+    <bean id="TransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!--通知关于事务的配置（配置我们的隔离级别 传播行为）
+    transaction-manager 挂载的是哪个事务平台管理器
+    -->
+    <tx:advice id="txAdvice" transaction-manager="TransactionManager">
+        <!--二。设置属性-->
+        <tx:attributes>
+            <!--
+            method：要增强的方法标签
+            name:方法名称
+            isolation：将要使用的隔离级别
+            propagation：将要使用的传播行为
+            read-only：方法事务是否只为只读
+            timeout：超时  默认不设置为-1
+            no-rollback-for：遇到什么异常之后不会回滚
+            rollback-for：遇到什么异常之后回滚
+            -->
+            <tx:method name="transfer*" isolation="REPEATABLE_READ" propagation="REQUIRED" read-only="false" timeout="-1"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!--三.编写aop配置-->
+   <aop:config>
+      <!-- &lt;!&ndash; 编写切点 通过切点表达式来获取切点&ndash;&gt;-->
+        <aop:pointcut id="pointcut01" expression="execution(* *..transfer(..))"></aop:pointcut>
+       <!-- &lt;!&ndash;增强切点
+        配置增强
+        advice-ref：引用增强
+        pointcut-ref：引用切点&ndash;&gt;-->
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="pointcut01" ></aop:advisor>
+    </aop:config>
+
+
+
+
+</beans>
