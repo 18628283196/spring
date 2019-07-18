@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="test">
+
+
+    <!--1.根据id查询用户-->
+  <select id="findUserById" resultType="user">
+        select * from user where id = #{id};
+</select>
+
+    <!--* 2.根据name查询用户-->
+    <select id="findUserByName" resultType="user">
+        select * from user where username = #{username}
+    </select>
+
+    <!--* 3.添加user-->
+  <!--  private String username;
+    private Date birthday;
+    private String sex;
+    private String address;-->
+    <select id="insertUser" >
+        insert into user values (null,#{username},#{birthday},#{sex},#{address})
+    </select>
+
+
+</mapper>

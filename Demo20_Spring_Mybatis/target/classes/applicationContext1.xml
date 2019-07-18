@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--
+        整合:
+        spring整合如下内容:
+        1.引入db.properties
+        2.配置数据源
+        3.配置SqlSessionFactory
+            3.1配置数据源
+            3.2配置加载SqlMapConfig.xml
+            3.3配置别名
+        4.配置事务
+            4.1事务管理器
+            4.2事务增强
+            4.3事务的增强应用到切入点上
+     -->
+    <!-- 1.引入db.properties-->
+   <context:property-placeholder location="db.properties"></context:property-placeholder>
+    <!--2.配置数据源-->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql:///day24"/>
+        <property name="username" value="root"/>
+        <property name="password" value="root"/>
+    </bean>
+
+   <!-- 3.配置SqlSessionFactor  不是原来的工厂 是mybatis-Spring整合包的对象
+        3.1配置数据源
+        3.2配置加载到SqlMapConfig.xml
+        3.3配置别名
+        3.4加载映射文件
+        -->
+    <bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--3.1配置数据源-->
+        <property name="dataSource"  ref="dataSource"/>
+        <!--3.2配置加载到SqlMapConfig.xml-->
+        <property name="configLocation" value="classpath:SqlMapConfig.xml"/>
+        <!--3.3配置别名&ndash;-->
+        <property name="typeAliasesPackage" value="com.itheima.pojo"/>
+        <!--&lt;!&ndash;3.4加载映射文件&ndash;&gt;
+        <property name="mapperLocations" value="User.xml"/>-->
+
+    </bean>
+<!--
+    4.配置事务管理
+        4.1事务管理器
+        4.2事务增强
+        4.3事务的增强应用到切点上-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="insert*" isolation="REPEATABLE_READ" propagation="REQUIRED" timeout="-1" />
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+       <!-- 配置切入点-->
+        <aop:pointcut id="pointcut01" expression="execution(* *..insert*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="pointcut01"></aop:advisor>
+    </aop:config>
+
+    <!--如果用传统dao  声明:注入一个工厂对象-->
+ <!--   <bean id="userDao" class="com.itheima.dao.UserDaoImpl">
+        <property name="sqlSessionFactory" ref="sessionFactory"></property>
+    </bean>-->
+
+    <!--使用mapper动态代理方式，包扫描器。。-->
+    <bean id="MapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+       <!--
+            1.扫描mapper映射文件
+                名一样  在一起
+             2.根据接口来创建代理
+       -->
+
+        <property name="basePackage" value="com.itheima.mapper"/>
+    </bean>
+</beans>
