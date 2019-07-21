@@ -1,0 +1,31 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <display-name>Archetype Created Web Application</display-name>
+  <!--
+      指定加载配置文件的名称和路径
+  -->
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:ApplicationContext.xml</param-value>
+  </context-param>
+  <!--
+      配置监听器
+      监听Servlet对象的创建
+      spring容器创建出来，ServletContext Tomcat启动的时候，ServletContext只创建一次
+      监听器执行的时候，会加载ApplicationContext.xml文件
+  -->
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <servlet>
+    <servlet-name>DengLuServlet</servlet-name>
+    <servlet-class>com.itheima.servlet.DengLuServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DengLuServlet</servlet-name>
+    <url-pattern>/DengLuServlet</url-pattern>
+  </servlet-mapping>
+</web-app>

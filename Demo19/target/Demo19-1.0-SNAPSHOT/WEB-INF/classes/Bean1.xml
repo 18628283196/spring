@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--创建目标对象-->
+    <bean id="studentService" class="com.itheima.aop_xml.StudentServiceImpl" ></bean>
+    <!--创建增强对象-->
+    <bean id="logAdvice" class="com.itheima.aop_xml.LogAdvice"></bean>
+
+    <!--配置aop-->
+    <aop:config>
+       <!-- 配置切入点-->
+        <aop:pointcut id="pointcut01" expression="execution(* *.add*(..))"></aop:pointcut>
+        <aop:pointcut id="pointcut02" expression="execution(* *.delete*(..))"></aop:pointcut>
+        <aop:pointcut id="pointcut03" expression="execution(* *.update*(..))"></aop:pointcut>
+        <aop:pointcut id="pointcut04" expression="execution(* *.select*(..))"></aop:pointcut>
+        <aop:pointcut id="pointcut05" expression="execution(* *.batch*(..))"></aop:pointcut>
+        <!--配置切面-->
+        <aop:aspect ref="logAdvice">
+            <!--
+                    把增强用到切入点上  before：前置通知  method：指定增强类中的哪个方法   pointcut-ref：引入的是哪个切入点
+            -->
+            <!--前置通知来增强我的切入点1-->
+            <aop:before method="beforeAdvice" pointcut-ref="pointcut01"/>
+            <!--后置通知来增强我的切入点2-->
+            <aop:after-returning method="afterAdvice" pointcut-ref="pointcut02"/>
+           <!-- 环绕增强通知来增强我的切入点3-->
+            <aop:around method="aroundAdvice" pointcut-ref="pointcut03"/>
+            <!--异常增强通知来增强我的切入点4-->
+            <aop:after-throwing method="throwAbleAdvice" pointcut-ref="pointcut04"/>
+           <!-- 最终增强通知来增强我的切入点5-->
+            <aop:after method="lastAdvice" pointcut-ref="pointcut05"/>
+
+        </aop:aspect>
+    </aop:config>
+
+</beans>
