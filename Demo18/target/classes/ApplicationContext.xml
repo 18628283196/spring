@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="user" class="com.itheima.dao.UserDaoImpl">
+        <property name="name" value="张无忌"/>
+    </bean>
+
+
+    <!--构造方法创建对象并测试-->
+    <bean id="user_1" class="com.itheima.pojo.User"></bean>
+
+    <!--静态工厂对象创建对象并测试-->
+   <bean id="user_2" class="com.itheima.pojo.StaticFactory" factory-method="getUser">
+   </bean>
+
+    <!--实例工厂创建对象-->
+    <bean id="BeanFactory" class="com.itheima.pojo.BeanFactory"></bean>
+    <!--从工厂对象中获取User对象
+            id：要获取的user对应的id
+  factory-bean： 指向引用的工厂对象
+  factory-method：通过工厂的哪个方法来获取user对象
+    -->
+    <bean id="user_3" factory-bean="BeanFactory" factory-method="findUser"></bean>
+</beans>

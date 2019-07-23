@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <!--
+            使用set方法赋值
+    -->
+    <bean id="birthday" class="java.util.Date"/>
+    <bean id="student" class="com.itheima.service.Student">
+        <property name="name" value="小龙女"/>
+        <property name="id" value="1"/>
+        <property name="sex" value="男"/>
+        <property name="birthday" ref="birthday"/>
+    </bean>
+
+    <!--
+        利用有参构造设置参数
+    -->
+    <bean id="student1" class="com.itheima.service.Student">
+        <constructor-arg name="id" value="2" ></constructor-arg>
+        <constructor-arg name="name" value="芙蓉"></constructor-arg>
+        <constructor-arg name="sex" value="女"></constructor-arg>
+         <constructor-arg name="birthday" ref="birthday"></constructor-arg>
+    </bean>
+
+    <!--创建对象，采用p空间设置属性
+    -->
+    <bean id="student2" class="com.itheima.service.Student" p:id="3" p:name="花如意" p:sex="女" p:birthday-ref="birthday" />
+    <!--创建对象，采用c空间设置属性-->
+    <bean id="student3" class="com.itheima.service.Student" c:id="4" c:name="杨幂" c:sex="女" c:birthday-ref="birthday" />
+        </beans>
+
