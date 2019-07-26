@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    mapper:映射文件的根目录
+        namespace：命名空间，用于隔离sql ，类似java中包作用，区分不同的SQL语句
+
+-->
+<mapper namespace="test">
+    <!--SQL语句：
+    id：这条SQL语句的唯一标识，不能省略
+    resultType：返回的数据类型，类的完全路径名
+    parameterType：提供的参数的数据类型，类的完全路径名
+    -->
+<!--根据id查询-->
+<select id="findUserById" resultType="com.itheima.user.User" parameterType="user">
+    select * from user where uid =#{id}
+</select>
+
+    <!--模糊查询的第一种方式-->
+    <select id="findUserByName" resultType="com.itheima.user.User" parameterType="user">
+        select * from user where name like #{name}
+    </select>
+
+    <!--模糊查询的第二种方式
+                    传递参数： #{} ongl表达式的方式 采用的是预处理的方式,解决SQL注入的问题
+                    修改字符串拼接的方式：
+                                     ${value}   如果是基本数据类型和String类型  只能给value
+    -->
+    <select id="findUserByName2" resultType="com.itheima.user.User" parameterType="user">
+        select * from user where name like '%${value}%'
+    </select>
+
+    <!--
+    添加用户：参数传递的是基本数据类型  #{随意}
+               参数传递的是 pojo类型    #{属性名}
+                private int uid;
+    private String name;
+    private String sex;
+    private int age;
+    private String adress;
+    private String qq;
+    private String eameil;
+    -->
+    <insert id="insertUser" parameterType="user">
+      <!--
+      添加用户后获取自动增长的id
+                keyProperty；查询到的属性设置到user的那个属性上
+                keyColumn:查询数据库的哪个列
+                resultType:数据的返回的结果类型
+                order:insert语句执行之前执行还是之后执行  该查询：AFTER BEFOER
+
+      -->
+<!--
+        <selectKey keyProperty="uid" keyColumn="uid" resultType="java.lang.Integer" order="AFTER">
+            SELECT last_insert_id()
+            &lt;!&ndash; ##不自己编写，String类型，添加之前自动生成32位的字符串，设置到id值中
+                    select uuid();&ndash;&gt;
+        </selectKey>-->
+        insert into user values(#{uid},#{name},#{sex},#{age},#{adress},#{qq},#{eameil});
+    </insert>
+    
+    
+    <!--更新用户操作-->
+    <update id="updateUser" parameterType="user">
+        update user set name = #{name} ,sex = #{sex},age = #{age} where uid =#{uid};
+    </update>
+
+    <!--删除一条用户数据-->
+    <delete id="deleteUserById" parameterType="java.lang.Integer">
+        delete from user where uid = #{id};
+    </delete>
+
+
+
+</mapper>
