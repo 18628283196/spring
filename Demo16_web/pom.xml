@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.itheima.Demo16_web</groupId>
+    <artifactId>Demo16_web</artifactId>
+    <version>1.0-SNAPSHOT</version>
+<!--如果是web项目需要设置打包方式为war-->
+    <packaging>war</packaging>
+    <build>
+        <plugins>
+            <!--tomcat插件-->
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <path>/Demo16_web</path>
+                    <port>8080</port>
+                </configuration>
+            </plugin>
+
+
+        </plugins>
+    </build>
+    <!--
+    下载的lombok
+    c)扩展(IDEA)插件
+    (注意: 这个不是maven的插件, 是IDEA的插件)c)扩展(IDEA)插件 (注意: 这个不是maven的插件, 是IDEA的插件)
+     -->
+    <dependencies>
+            <!--
+            scope代表依赖范围：
+                    compile：导入的jar在编译测试和运行都有效
+                    test：导入的jar只在测试使用有效
+                    runtime：测试和运行期都有效
+                    provide：编译和测试有效，运行时无效
+            -->
+
+        <!--
+        导入Servlet相关的jar包 一共三个 ：Servlet  jsp   jstl
+        -->
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version> 2.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId> javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.46</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.0</version>
+        </dependency>
+    </dependencies>
+
+
+</project>
