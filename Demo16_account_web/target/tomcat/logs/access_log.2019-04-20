@@ -1,0 +1,10 @@
+0:0:0:0:0:0:0:1 - - [20/Apr/2019:20:21:59 +0800] "GET /Demo16_web HTTP/1.1" 302 - http-bio-8080-exec-1 0
+0:0:0:0:0:0:0:1 - - [20/Apr/2019:20:21:59 +0800] "GET /Demo16_web/ HTTP/1.1" 200 53 http-bio-8080-exec-3 570
+0:0:0:0:0:0:0:1 - - [20/Apr/2019:20:21:59 +0800] "GET /favicon.ico HTTP/1.1" 404 - http-bio-8080-exec-4 0
+0:0:0:0:0:0:0:1 - - [20/Apr/2019:20:23:09 +0800] "GET /Demo16_web/AccountWebServlet%EF%BC%9Fmoney=500&inName=jack&outName=rose HTTP/1.1" 404 1109 http-bio-8080-exec-6 4
+0:0:0:0:0:0:0:1 - - [20/Apr/2019:20:24:03 +0800] "GET /Demo16_web/AccountWebServlet%EF%BC%9FinName=jack&outName=rose&money=500 HTTP/1.1" 404 1109 http-bio-8080-exec-8 1
+0:0:0:0:0:0:0:1 - - [20/Apr/2019:20:24:10 +0800] "GET /Demo16_web/AccountWebServlet%EF%BC%9FinName=jack&outName=rose&money=500 HTTP/1.1" 404 1109 http-bio-8080-exec-10 2
+0:0:0:0:0:0:0:1 - - [20/Apr/2019:20:24:22 +0800] "GET /Demo16_web/AccountWebServlet?inName=jack&outName=rose&money=500 HTTP/1.1" 200 12 http-bio-8080-exec-10 357
+0:0:0:0:0:0:0:1 - - [20/Apr/2019:20:24:48 +0800] "GET /Demo16_web/AccountWebServlet?inName=jack&outName=rose&money=500 HTTP/1.1" 200 12 http-bio-8080-exec-10 6
+0:0:0:0:0:0:0:1 - - [20/Apr/2019:20:25:16 +0800] "GET /Demo16_web/AccountWebServlet?inName=jack&outName=rose&money=500 HTTP/1.1" 200 12 http-bio-8080-exec-10 13
+0:0:0:0:0:0:0:1 - - [20/Apr/2019:20:25:18 +0800] "GET /Demo16_web/AccountWebServlet?inName=jack&outName=rose&money=500 HTTP/1.1" 200 12 http-bio-8080-exec-10 11
