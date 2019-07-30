@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>Demo16_account_parent</artifactId>
+        <groupId>com.itheima.Demo16_account_parent</groupId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../Demo16_account_parent/pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>Demo16_account_service</artifactId>
+    <!--打包方式-->
+    <packaging>jar</packaging>
+    <!--依赖dao层-->
+    <dependencies>
+        <dependency>
+            <groupId>com.itheima.Demo16_account_parent</groupId>
+            <artifactId>Demo16_account_dao</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+
+</project>
