@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component inherit-compiler-output="true" jdk="1.8" jdk_type="JavaSDK">
+	<output-test url="file://$MODULE_DIR$/../out/test/Demo14_project"/>
+	<exclude-output/>
+	<contentEntry url="file://$MODULE_DIR$"/>
+	<lib name="Tomcat 8.5.31" scope="PROVIDED"/>
+	<levels>
+		<level name="Tomcat 8.5.31" value="application_server_libraries"/>
+		<level name="lib (16)" value="project"/>
+		<level name="commons-io-1.4" value="project"/>
+	</levels>
+</component>

@@ -1,0 +1,217 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <script src="js/jquery-3.3.1.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.validate.min.js"></script>
+
+    <style>
+      h1 {
+        text-align: center;
+      }
+      th,td{
+        text-align: center;
+      }
+    </style>
+    <script>
+     /* $(function () {
+          $.post("/Demo14_project/AllDataServlet",function (data) {
+              $(data).each(function (index,element) {
+               var $tr =   $(" <tr >\n" +
+                     "          <td><input type='checkbox' value='"+element.eid+"'/></td>\n" +
+                     "          <td>"+element.eid+"</td>\n" +
+                     "          <td>"+element.ename+"</td>\n" +
+                     "          <td>"+element.sex+"</td>\n" +
+                     "          <td><img src='http://localhost:8080/pic/"+element.photo+"'width='50px' '></td>\n" +
+                     "          <td>"+element.tel+"</td>\n" +
+                     "          <td>"+element.email+"</td>\n" +
+                     "          <td>"+element.address+"</td>\n" +
+                     "          <td>"+element.dname+"</td>\n" +
+                     "          <td><a href='update.html?eid="+element.eid+"' class='btn btn-primary'>修改</a> &nbsp;<a href='#' class='btn btn-primary' onclick='del(this,"+element.eid+")'>删除</a></td>\n" +
+                     "        </tr>");
+                      $("table").append($tr);
+              })
+
+          },"json")
+
+      })*/
+
+     $(function () {
+     query(1);
+     })
+
+//查询一页数据
+     function fun1(PageNumber) {
+         //删除 li和 tr
+         $("tr:gt(1)").remove();
+         $("li[name='myli']").remove();
+          query(PageNumber);
+     }
+
+
+     //查询一页数据的方法 抽取
+     function query(PageNumber) {
+         $.post("PageBeanQueryServlet", "currentPage=" + PageNumber, function (data) {
+             $(data.list).each(function (index, element) {
+                 var $tr = $(" <tr >\n" +
+                     "          <td><input type='checkbox' value='" + element.eid + "'/></td>\n" +
+                     "          <td>" + element.eid + "</td>\n" +
+                     "          <td>" + element.ename + "</td>\n" +
+                     "          <td>" + element.sex + "</td>\n" +
+                     "          <td><img src='http://localhost:8080/pic/" + element.photo + "'width='50px' '></td>\n" +
+                     "          <td>" + element.tel + "</td>\n" +
+                     "          <td>" + element.email + "</td>\n" +
+                     "          <td>" + element.address + "</td>\n" +
+                     "          <td>" + element.dname + "</td>\n" +
+                     "          <td><a href='update.html?eid=" + element.eid + "' class='btn btn-primary'>修改</a> &nbsp;<a href='#' class='btn btn-primary' onclick='del(this," + element.eid + ")'>删除</a></td>\n" +
+                     "        </tr>");
+                 $("table").append($tr);
+
+
+             })
+             //动态创建动态页码
+             for (var i = 0; i < data.totalPage; i++) {
+                 var $li = $("<li name='myli' ><a href='#' onclick='fun1($(this).html())'>" + (i + 1) + "</a></li>");
+                 $("li:last").before($li);
+                 //给当前页设置个背景颜色
+                 if((i+1) == data.currentPage){
+                     $li.prop("class","active");
+                 }
+             }
+         }, "json")
+     }
+
+     //删除一行数据
+      function del(t, eid) {
+      //$(t).parent().parent().remove();  //删除前台数据，后台并未删除
+          //发送ajax请求
+          $.post("/Demo14_project/DeleteByIdServlet","eid="+eid,function (data) {
+              if(data == 1){
+                  var flag = window.confirm("请确认是否删除");
+                  if(!flag){
+                      return;
+                  }
+                  $(t).parent().parent().remove();
+              }else{
+                  alert("删除失败")
+              }
+          })
+      }
+
+
+      //批量删除
+      function fun() {
+          //添加一个是否确认删除
+         var flag = window.confirm("请确认是否删除");
+         if(!flag){
+             return;
+         }
+         //获取被勾选的复选框
+          var $arr = $(":checkbox:checked");
+          //定义一个空字符串的var dir ="";
+          var dir = "";
+          //循环遍历数组，将获取的id值用空字符串拼接起来
+          $arr.each(function (index, element) {
+              dir +=$(element).val()+",";
+          })
+          alert(dir);
+          //发送ajax请求
+          $.post("DeleteAllById","dir="+dir,function (data) {
+              //判断返回的值如果data==1则全部删除成功，data==0则删除失败
+             if(data==1){
+                 $arr.each(function (index, element) {
+                     //获取父类元素==》td,在获取爷爷元素==tr===>remove
+                     $(element).parent().parent().remove()
+                 })
+             }
+
+          })
+      }
+      
+      //向左按钮查询数据
+      function left() {
+
+         //获取当前页
+          var currentPage = $("li[class='active']").text();
+          //判断是否是为第一页
+          if(currentPage==1){
+              return;
+          }
+          fun1(currentPage-1);
+      }
+      
+
+      //向右查询数据
+      function right() {
+          //获取当前页
+          var currentPage = $("li[class='active']").text();
+
+          //拿到所有的li个数,减去前后两个按钮数就是总页数
+          var total = $("li").length-2;
+          if(currentPage == total){
+              return;
+          }
+          fun1(parseInt(currentPage)+1);
+      }
+
+
+
+
+     
+
+    </script>
+
+  </head>
+  <body>
+    <div class="container">
+      <h1>显示所有联系人</h1>
+      <table class="table table-bordered  table-hover">
+        <tr>
+          <td colspan="10">
+            <a href="add.html" class="btn btn-primary">添加</a>
+            <a href="#" class="btn btn-primary" onclick="fun()">批量删除</a>
+          </td>
+        </tr>
+        <tr class="bg-success">
+          <th>选择</th>
+          <th>编号</th>
+          <th>姓名</th>
+          <th>性别</th>
+          <th>照片</th>
+          <th>电话</th>
+          <th>邮箱</th>
+          <th>地址</th>
+          <th>部门</th>
+          <th>操作</th>
+        </tr>
+
+      </table>
+
+    </div>
+    <nav class="text-center">
+      <ul class="pagination">
+        <li>
+          <a href="#" aria-label="Previous" onclick="left()">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+    <!--    <li><a href="#">1</a></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#">4</a></li>
+        <li><a href="#">5</a></li>-->
+        <li>
+          <a href="#" aria-label="Next" onclick="right()">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    </nav>
+
+  
+  </body>
+</html>
